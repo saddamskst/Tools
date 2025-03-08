@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Counter - Free Online Word Count Tool</title>
+    <meta name="description" content="Free online word counter tool. Count words, characters, sentences, and paragraphs instantly. Perfect for writers, students, and content creators.">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/assets/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="container py-4">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Word Counter</h1>
+                <p class="tool-description">
+                    Count words, characters, sentences, and paragraphs instantly. Perfect for essays, social media posts, and content writing.
+                </p>
+            </div>
+
+            <!-- Word Counter Tool -->
+            <div class="row">
+                <div class="col-md-8 mx-auto">
+                    <div class="form-group mb-4">
+                        <textarea id="textInput" class="form-control" rows="10" 
+                            placeholder="Type or paste your text here..."></textarea>
+                    </div>
+
+                    <!-- Statistics -->
+                    <div class="row text-center mb-4">
+                        <div class="col-md-3 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Words</h5>
+                                    <p id="wordCount" class="h3 mb-0">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Characters</h5>
+                                    <p id="charCount" class="h3 mb-0">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Sentences</h5>
+                                    <p id="sentenceCount" class="h3 mb-0">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Paragraphs</h5>
+                                    <p id="paragraphCount" class="h3 mb-0">0</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Statistics -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Reading Time</h5>
+                                    <p id="readingTime" class="mb-0">0 minutes</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Speaking Time</h5>
+                                    <p id="speakingTime" class="mb-0">0 minutes</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-center gap-2">
+                        <button id="copyButton" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard">
+                            <i class="fas fa-copy"></i> Copy Text
+                        </button>
+                        <button id="clearButton" class="btn btn-secondary">
+                            <i class="fas fa-trash"></i> Clear Text
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ad Section -->
+            <div class="ad-section text-center mt-4">
+                <div class="ad-placeholder">
+                    <!-- Ad Space -->
+                    <div style="background: #f0f0f0; padding: 20px; border: 1px dashed #ccc;">
+                        Advertisement Space
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="/assets/js/main.js"></script>
+    <!-- Tool Specific JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const textInput = document.getElementById('textInput');
+            const wordCount = document.getElementById('wordCount');
+            const charCount = document.getElementById('charCount');
+            const sentenceCount = document.getElementById('sentenceCount');
+            const paragraphCount = document.getElementById('paragraphCount');
+            const readingTime = document.getElementById('readingTime');
+            const speakingTime = document.getElementById('speakingTime');
+            const copyButton = document.getElementById('copyButton');
+            const clearButton = document.getElementById('clearButton');
+
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            function updateCounts() {
+                const text = textInput.value;
+                
+                // Word count
+                const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+                wordCount.textContent = words.length;
+
+                // Character count
+                charCount.textContent = text.length;
+
+                // Sentence count
+                const sentences = text.split(/[.!?]+/).filter(sentence => sentence.trim().length > 0);
+                sentenceCount.textContent = sentences.length;
+
+                // Paragraph count
+                const paragraphs = text.split('\n\n').filter(para => para.trim().length > 0);
+                paragraphCount.textContent = paragraphs.length;
+
+                // Reading time (average person reads 200-250 words per minute)
+                const readingMinutes = Math.ceil(words.length / 200);
+                readingTime.textContent = `${readingMinutes} minute${readingMinutes !== 1 ? 's' : ''}`;
+
+                // Speaking time (average person speaks 125-150 words per minute)
+                const speakingMinutes = Math.ceil(words.length / 125);
+                speakingTime.textContent = `${speakingMinutes} minute${speakingMinutes !== 1 ? 's' : ''}`;
+            }
+
+            // Event listeners
+            textInput.addEventListener('input', updateCounts);
+
+            copyButton.addEventListener('click', function() {
+                copyToClipboard(textInput.value);
+            });
+
+            clearButton.addEventListener('click', function() {
+                textInput.value = '';
+                updateCounts();
+            });
+
+            // Initialize counts
+            updateCounts();
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Counter - Free Online Text Analysis Tool</title>
+    <meta name="description" content="Count words, characters, sentences, and paragraphs. Get detailed text analysis including reading time estimation and keyword density.">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../../assets/css/style.css" rel="stylesheet">
+    <style>
+        .stats-card {
+            transition: transform 0.2s;
+        }
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+        .stats-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #0d6efd;
+        }
+        .stats-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        .detailed-stats {
+            font-size: 0.9rem;
+        }
+        .keyword-table {
+            font-size: 0.9rem;
+        }
+        .reading-time {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .reading-time i {
+            color: #0d6efd;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="container py-4">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Word Counter</h1>
+                <p class="tool-description">
+                    Analyze your text with our advanced word counter. Get detailed statistics including word count, 
+                    character count, sentence count, reading time estimation, and keyword density analysis.
+                </p>
+            </div>
+
+            <!-- Tool Content -->
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Text Input Section -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <textarea class="form-control" id="textInput" rows="12" 
+                                placeholder="Type or paste your text here..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Reading Time Section -->
+                    <div class="reading-time mb-4">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <i class="fas fa-book-reader"></i>
+                                <span id="readingTime">0 min read</span>
+                            </div>
+                            <div class="col-md-4">
+                                <i class="fas fa-microphone"></i>
+                                <span id="speakingTime">0 min speech</span>
+                            </div>
+                            <div class="col-md-4">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span id="readingLevel">Reading Level: N/A</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Keyword Density -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Keyword Density</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped keyword-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Word</th>
+                                            <th>Count</th>
+                                            <th>Frequency</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="keywordTable">
+                                        <tr>
+                                            <td colspan="3" class="text-center">Enter text to analyze keywords</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <!-- Main Stats -->
+                    <div class="row row-cols-2 g-3 mb-4">
+                        <div class="col">
+                            <div class="card stats-card">
+                                <div class="card-body text-center">
+                                    <div class="stats-number" id="wordCount">0</div>
+                                    <div class="stats-label">Words</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card stats-card">
+                                <div class="card-body text-center">
+                                    <div class="stats-number" id="charCount">0</div>
+                                    <div class="stats-label">Characters</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card stats-card">
+                                <div class="card-body text-center">
+                                    <div class="stats-number" id="sentenceCount">0</div>
+                                    <div class="stats-label">Sentences</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card stats-card">
+                                <div class="card-body text-center">
+                                    <div class="stats-number" id="paragraphCount">0</div>
+                                    <div class="stats-label">Paragraphs</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Stats -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Detailed Statistics</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled detailed-stats">
+                                <li class="mb-2">
+                                    <i class="fas fa-keyboard me-2"></i>
+                                    <span id="charNoSpaces">0</span> characters (no spaces)
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-clock me-2"></i>
+                                    <span id="avgWordLength">0</span> avg. word length
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-align-left me-2"></i>
+                                    <span id="avgSentenceLength">0</span> avg. sentence length
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-paragraph me-2"></i>
+                                    <span id="avgParagraphLength">0</span> avg. paragraph length
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-percentage me-2"></i>
+                                    <span id="uniqueWords">0%</span> unique words
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ad Section -->
+            <div class="ad-section text-center mt-4">
+                <div class="ad-placeholder">
+                    <!-- Ad Space -->
+                    <div style="background: #f0f0f0; padding: 20px; border: 1px dashed #ccc;">
+                        Advertisement Space
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="../../assets/js/main.js"></script>
+    <!-- Tool Specific JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const textInput = document.getElementById('textInput');
+            
+            textInput.addEventListener('input', analyzeText);
+
+            function analyzeText() {
+                const text = textInput.value;
+                
+                // Basic counts
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                const chars = text.length;
+                const charsNoSpaces = text.replace(/\s/g, '').length;
+                const sentences = text.trim() ? text.split(/[.!?]+/).filter(Boolean).length : 0;
+                const paragraphs = text.trim() ? text.split(/\n\s*\n/).filter(Boolean).length : 0;
+
+                // Update main stats
+                document.getElementById('wordCount').textContent = words;
+                document.getElementById('charCount').textContent = chars;
+                document.getElementById('sentenceCount').textContent = sentences;
+                document.getElementById('paragraphCount').textContent = paragraphs;
+
+                // Calculate averages
+                const avgWordLength = words ? (charsNoSpaces / words).toFixed(1) : 0;
+                const avgSentenceLength = sentences ? (words / sentences).toFixed(1) : 0;
+                const avgParagraphLength = paragraphs ? (words / paragraphs).toFixed(1) : 0;
+
+                // Update detailed stats
+                document.getElementById('charNoSpaces').textContent = charsNoSpaces;
+                document.getElementById('avgWordLength').textContent = avgWordLength;
+                document.getElementById('avgSentenceLength').textContent = avgSentenceLength + ' words';
+                document.getElementById('avgParagraphLength').textContent = avgParagraphLength + ' words';
+
+                // Calculate unique words percentage
+                const uniqueWordsCount = new Set(text.toLowerCase().match(/\b\w+\b/g) || []).size;
+                const uniqueWordsPercentage = words ? ((uniqueWordsCount / words) * 100).toFixed(1) : 0;
+                document.getElementById('uniqueWords').textContent = uniqueWordsPercentage + '%';
+
+                // Calculate reading times
+                const wordsPerMinute = 225; // Average reading speed
+                const wordsPerMinuteSpeaking = 130; // Average speaking speed
+                const readingTimeMinutes = Math.ceil(words / wordsPerMinute);
+                const speakingTimeMinutes = Math.ceil(words / wordsPerMinuteSpeaking);
+
+                document.getElementById('readingTime').textContent = 
+                    `${readingTimeMinutes} min read`;
+                document.getElementById('speakingTime').textContent = 
+                    `${speakingTimeMinutes} min speech`;
+
+                // Calculate reading level (simplified)
+                const readingLevel = calculateReadingLevel(text);
+                document.getElementById('readingLevel').textContent = 
+                    `Reading Level: ${readingLevel}`;
+
+                // Update keyword density
+                updateKeywordDensity(text);
+            }
+
+            function calculateReadingLevel(text) {
+                if (!text.trim()) return 'N/A';
+                
+                const words = text.trim().split(/\s+/).length;
+                const sentences = text.split(/[.!?]+/).filter(Boolean).length;
+                const syllables = countSyllables(text);
+
+                if (words === 0 || sentences === 0) return 'N/A';
+
+                // Flesch-Kincaid Grade Level
+                const grade = 0.39 * (words / sentences) + 11.8 * (syllables / words) - 15.59;
+                
+                if (grade <= 6) return 'Easy';
+                if (grade <= 12) return 'Medium';
+                return 'Advanced';
+            }
+
+            function countSyllables(text) {
+                return text.toLowerCase()
+                    .replace(/[^a-z]/g, '')
+                    .replace(/[^aeiou]+/g, ' ')
+                    .trim()
+                    .split(/\s+/).length;
+            }
+
+            function updateKeywordDensity(text) {
+                if (!text.trim()) {
+                    document.getElementById('keywordTable').innerHTML = 
+                        '<tr><td colspan="3" class="text-center">Enter text to analyze keywords</td></tr>';
+                    return;
+                }
+
+                const words = text.toLowerCase().match(/\b\w+\b/g) || [];
+                const wordCount = {};
+                words.forEach(word => {
+                    wordCount[word] = (wordCount[word] || 0) + 1;
+                });
+
+                const sortedWords = Object.entries(wordCount)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 10);
+
+                const tableContent = sortedWords.map(([word, count]) => {
+                    const frequency = ((count / words.length) * 100).toFixed(1);
+                    return `
+                        <tr>
+                            <td>${word}</td>
+                            <td>${count}</td>
+                            <td>${frequency}%</td>
+                        </tr>
+                    `;
+                }).join('');
+
+                document.getElementById('keywordTable').innerHTML = tableContent;
+            }
+        });
+    </script>
+</body>
+</html> 

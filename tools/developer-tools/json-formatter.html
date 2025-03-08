@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Formatter and Validator - Free Online Developer Tool</title>
+    <meta name="description" content="Format, validate, and beautify your JSON data with this free online tool. Features syntax highlighting and error detection.">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../../assets/css/style.css" rel="stylesheet">
+    <style>
+        .json-editor {
+            font-family: 'Courier New', Courier, monospace;
+            min-height: 300px;
+            resize: vertical;
+        }
+        .error-message {
+            color: #dc3545;
+            margin-top: 10px;
+            display: none;
+        }
+        .success-message {
+            color: #198754;
+            margin-top: 10px;
+            display: none;
+        }
+        .toolbar {
+            margin-bottom: 15px;
+        }
+        .toolbar .btn {
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .indent-options {
+            display: inline-block;
+            margin-right: 15px;
+        }
+        .indent-options select {
+            width: auto;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="container py-4">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>JSON Formatter and Validator</h1>
+                <p class="tool-description">
+                    Format, validate, and beautify your JSON data. This tool helps you make your JSON readable 
+                    and checks for syntax errors. Features include syntax highlighting, custom indentation, 
+                    and minification options.
+                </p>
+            </div>
+
+            <!-- Tool Content -->
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="toolbar">
+                                <div class="indent-options">
+                                    <label for="indentSize" class="form-label">Indent Size:</label>
+                                    <select class="form-select form-select-sm" id="indentSize">
+                                        <option value="2">2 spaces</option>
+                                        <option value="4">4 spaces</option>
+                                        <option value="tab">Tab</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary" onclick="formatJSON()">
+                                    <i class="fas fa-indent"></i> Format JSON
+                                </button>
+                                <button class="btn btn-secondary" onclick="minifyJSON()">
+                                    <i class="fas fa-compress-alt"></i> Minify
+                                </button>
+                                <button class="btn btn-success" onclick="validateJSON()">
+                                    <i class="fas fa-check-circle"></i> Validate
+                                </button>
+                                <button class="btn btn-info" onclick="copyToClipboard()">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                                <button class="btn btn-warning" onclick="clearEditor()">
+                                    <i class="fas fa-trash-alt"></i> Clear
+                                </button>
+                            </div>
+
+                            <div class="mb-3">
+                                <textarea class="form-control json-editor" id="jsonInput" rows="15" 
+                                    placeholder="Paste your JSON here..."></textarea>
+                                <div class="error-message" id="errorMessage"></div>
+                                <div class="success-message" id="successMessage"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sample JSON Section -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Sample JSON</h5>
+                        </div>
+                        <div class="card-body">
+                            <button class="btn btn-outline-primary" onclick="loadSampleJSON()">
+                                <i class="fas fa-file-code"></i> Load Sample JSON
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ad Section -->
+            <div class="ad-section text-center mt-4">
+                <div class="ad-placeholder">
+                    <!-- Ad Space -->
+                    <div style="background: #f0f0f0; padding: 20px; border: 1px dashed #ccc;">
+                        Advertisement Space
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="../../assets/js/main.js"></script>
+    <!-- Tool Specific JavaScript -->
+    <script>
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            successDiv.style.display = 'none';
+        }
+
+        function showSuccess(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            errorDiv.style.display = 'none';
+        }
+
+        function getIndentation() {
+            const size = document.getElementById('indentSize').value;
+            return size === 'tab' ? '\t' : ' '.repeat(parseInt(size));
+        }
+
+        function formatJSON() {
+            try {
+                const input = document.getElementById('jsonInput').value;
+                if (!input.trim()) {
+                    showError('Please enter some JSON to format.');
+                    return;
+                }
+                const parsed = JSON.parse(input);
+                const formatted = JSON.stringify(parsed, null, getIndentation());
+                document.getElementById('jsonInput').value = formatted;
+                showSuccess('JSON formatted successfully!');
+            } catch (e) {
+                showError('Invalid JSON: ' + e.message);
+            }
+        }
+
+        function minifyJSON() {
+            try {
+                const input = document.getElementById('jsonInput').value;
+                if (!input.trim()) {
+                    showError('Please enter some JSON to minify.');
+                    return;
+                }
+                const parsed = JSON.parse(input);
+                const minified = JSON.stringify(parsed);
+                document.getElementById('jsonInput').value = minified;
+                showSuccess('JSON minified successfully!');
+            } catch (e) {
+                showError('Invalid JSON: ' + e.message);
+            }
+        }
+
+        function validateJSON() {
+            try {
+                const input = document.getElementById('jsonInput').value;
+                if (!input.trim()) {
+                    showError('Please enter some JSON to validate.');
+                    return;
+                }
+                JSON.parse(input);
+                showSuccess('Valid JSON!');
+            } catch (e) {
+                showError('Invalid JSON: ' + e.message);
+            }
+        }
+
+        function copyToClipboard() {
+            const textarea = document.getElementById('jsonInput');
+            textarea.select();
+            document.execCommand('copy');
+            showSuccess('Copied to clipboard!');
+        }
+
+        function clearEditor() {
+            document.getElementById('jsonInput').value = '';
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        function loadSampleJSON() {
+            const sampleJSON = {
+                "name": "John Doe",
+                "age": 30,
+                "email": "john@example.com",
+                "address": {
+                    "street": "123 Main St",
+                    "city": "Boston",
+                    "state": "MA",
+                    "zip": "02108"
+                },
+                "hobbies": [
+                    "reading",
+                    "hiking",
+                    "photography"
+                ],
+                "active": true
+            };
+            document.getElementById('jsonInput').value = JSON.stringify(sampleJSON, null, getIndentation());
+            showSuccess('Sample JSON loaded!');
+        }
+
+        // Add tab support
+        document.getElementById('jsonInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = this.selectionStart;
+                const end = this.selectionEnd;
+                const value = this.value;
+                this.value = value.substring(0, start) + '\t' + value.substring(end);
+                this.selectionStart = this.selectionEnd = start + 1;
+            }
+        });
+    </script>
+</body>
+</html> 

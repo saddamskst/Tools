@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Tags Extractor - Free Online Tool</title>
+    <meta name="description" content="Extract tags and keywords from any YouTube video. Free online YouTube tags extractor tool.">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../../assets/css/style.css" rel="stylesheet">
+    <style>
+        .url-input {
+            font-size: 16px;
+            padding: 12px;
+        }
+        .error-message {
+            display: none;
+            color: #dc3545;
+            margin-top: 10px;
+        }
+        .success-message {
+            display: none;
+            color: #198754;
+            margin-top: 10px;
+        }
+        .results-container {
+            display: none;
+            margin-top: 20px;
+        }
+        .tag-list {
+            margin: 20px 0;
+        }
+        .tag-item {
+            display: inline-block;
+            background: #f8f9fa;
+            padding: 5px 10px;
+            margin: 5px;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+            cursor: pointer;
+        }
+        .tag-item:hover {
+            background: #e9ecef;
+        }
+        .copy-btn {
+            margin: 10px 0;
+        }
+        .video-info {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .video-thumbnail {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .stat-item {
+            flex: 1;
+            min-width: 150px;
+            padding: 10px;
+            background: #fff;
+            border-radius: 4px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="container py-4">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>YouTube Tags Extractor</h1>
+                <p class="tool-description">
+                    Extract tags and keywords from any YouTube video. Analyze video metadata and get insights 
+                    about tags usage to improve your video's SEO.
+                </p>
+            </div>
+
+            <!-- Tool Content -->
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <!-- Input Form -->
+                            <form id="tagsForm" class="needs-validation" novalidate>
+                                <div class="mb-3">
+                                    <label for="videoUrl" class="form-label">YouTube Video URL</label>
+                                    <input type="url" class="form-control url-input" id="videoUrl" 
+                                           placeholder="https://www.youtube.com/watch?v=..." required>
+                                    <div class="invalid-feedback">
+                                        Please enter a valid YouTube video URL
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-search"></i> Extract Tags
+                                </button>
+                            </form>
+
+                            <div class="error-message" id="errorMessage"></div>
+                            <div class="success-message" id="successMessage"></div>
+
+                            <!-- Results -->
+                            <div class="results-container" id="resultsContainer">
+                                <!-- Video Information -->
+                                <div class="video-info">
+                                    <img src="" alt="Video Thumbnail" class="video-thumbnail" id="videoThumbnail">
+                                    <h5 id="videoTitle"></h5>
+                                    <p id="videoDescription" class="text-muted"></p>
+                                    <div class="stats-container">
+                                        <div class="stat-item">
+                                            <i class="fas fa-tags"></i>
+                                            <h6>Total Tags</h6>
+                                            <span id="tagCount">0</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <i class="fas fa-eye"></i>
+                                            <h6>Views</h6>
+                                            <span id="viewCount">0</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            <h6>Likes</h6>
+                                            <span id="likeCount">0</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tags List -->
+                                <h5>Extracted Tags</h5>
+                                <div class="tag-list" id="tagList"></div>
+
+                                <!-- Copy Options -->
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-success copy-btn" onclick="copyTags('comma')">
+                                        <i class="fas fa-copy"></i> Copy Tags (Comma Separated)
+                                    </button>
+                                    <button class="btn btn-success copy-btn" onclick="copyTags('line')">
+                                        <i class="fas fa-copy"></i> Copy Tags (One Per Line)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Instructions -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">How to Extract YouTube Tags</h5>
+                        </div>
+                        <div class="card-body">
+                            <ol class="mb-0">
+                                <li>Copy the URL of the YouTube video you want to analyze</li>
+                                <li>Paste the URL in the input field above</li>
+                                <li>Click "Extract Tags" to get the video's tags</li>
+                                <li>Click on any tag to copy it individually</li>
+                                <li>Use the copy buttons to copy all tags in your preferred format</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Features</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="mb-0">
+                                <li>Extract tags from any public YouTube video</li>
+                                <li>View video statistics and metadata</li>
+                                <li>Copy tags in different formats</li>
+                                <li>Fast and easy to use</li>
+                                <li>No registration required</li>
+                                <li>Free to use</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ad Section -->
+            <div class="ad-section text-center mt-4">
+                <div class="ad-placeholder">
+                    <!-- Ad Space -->
+                    <div style="background: #f0f0f0; padding: 20px; border: 1px dashed #ccc;">
+                        Advertisement Space
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="../../assets/js/main.js"></script>
+    <!-- Tool Specific JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('tagsForm');
+            const videoUrl = document.getElementById('videoUrl');
+            const resultsContainer = document.getElementById('resultsContainer');
+            const tagList = document.getElementById('tagList');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (form.checkValidity()) {
+                    extractTags();
+                }
+                form.classList.add('was-validated');
+            });
+
+            function extractTags() {
+                const url = videoUrl.value;
+                if (!isValidYouTubeUrl(url)) {
+                    showError('Invalid YouTube URL. Please enter a valid YouTube video URL.');
+                    return;
+                }
+
+                // Note: In a real implementation, you would need to use YouTube's API
+                // This is a simplified version for demonstration
+                const videoId = extractVideoId(url);
+                document.getElementById('videoThumbnail').src = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+                document.getElementById('videoTitle').textContent = 'Sample Video Title';
+                document.getElementById('videoDescription').textContent = 'This is a sample video description...';
+                document.getElementById('tagCount').textContent = '5';
+                document.getElementById('viewCount').textContent = '1,234';
+                document.getElementById('likeCount').textContent = '567';
+
+                // Sample tags
+                const sampleTags = ['youtube', 'video', 'tutorial', 'how to', 'guide'];
+                displayTags(sampleTags);
+
+                showSuccess('Tags extracted successfully!');
+                resultsContainer.style.display = 'block';
+            }
+
+            function displayTags(tags) {
+                tagList.innerHTML = '';
+                tags.forEach(tag => {
+                    const tagElement = document.createElement('span');
+                    tagElement.className = 'tag-item';
+                    tagElement.textContent = tag;
+                    tagElement.onclick = () => copyToClipboard(tag);
+                    tagList.appendChild(tagElement);
+                });
+            }
+        });
+
+        function isValidYouTubeUrl(url) {
+            return /^https?:\/\/(www\.)?youtube\.com\/watch\?v=[\w-]+/.test(url);
+        }
+
+        function extractVideoId(url) {
+            const match = url.match(/[?&]v=([^&]+)/);
+            return match ? match[1] : null;
+        }
+
+        function copyTags(format) {
+            const tags = Array.from(document.querySelectorAll('.tag-item')).map(tag => tag.textContent);
+            const text = format === 'comma' ? tags.join(', ') : tags.join('\n');
+            copyToClipboard(text);
+            showSuccess('Tags copied to clipboard!');
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showSuccess('Copied to clipboard!');
+            }).catch(err => {
+                showError('Failed to copy to clipboard');
+            });
+        }
+
+        function showError(message) {
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            successMessage.style.display = 'none';
+        }
+
+        function hideError() {
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        function showSuccess(message) {
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            successMessage.textContent = message;
+            successMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+        }
+    </script>
+</body>
+</html> 

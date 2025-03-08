@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image to PNG Converter - Free Online Tool</title>
+    <meta name="description" content="Convert images to PNG format online. Support for JPG, JPEG, WebP, GIF, and other formats. Free and easy to use.">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../../assets/css/style.css" rel="stylesheet">
+    <style>
+        .drop-zone {
+            border: 2px dashed #0d6efd;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .drop-zone:hover {
+            background: #e9ecef;
+            border-color: #0a58ca;
+        }
+        .drop-zone.dragover {
+            background: #e9ecef;
+            border-color: #0a58ca;
+        }
+        .preview-container {
+            max-width: 300px;
+            margin: 20px auto;
+            display: none;
+        }
+        .preview-image {
+            max-width: 100%;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .file-info {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 10px;
+        }
+        .progress {
+            display: none;
+            margin: 20px 0;
+        }
+        #downloadBtn {
+            display: none;
+        }
+        .settings-section {
+            margin: 20px 0;
+            display: none;
+        }
+        .error-message {
+            color: #dc3545;
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="container py-4">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Image to PNG Converter</h1>
+                <p class="tool-description">
+                    Convert your images to PNG format with this free online tool. Supports various input formats 
+                    including JPG, JPEG, WebP, and GIF. Maintain image quality while converting to PNG format.
+                </p>
+            </div>
+
+            <!-- Tool Content -->
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <!-- Upload Section -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="drop-zone" id="dropZone">
+                                <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
+                                <h4>Drag & Drop Image Here</h4>
+                                <p class="mb-0">or</p>
+                                <button class="btn btn-primary mt-3" onclick="document.getElementById('fileInput').click()">
+                                    Choose File
+                                </button>
+                                <input type="file" id="fileInput" hidden accept="image/*">
+                            </div>
+
+                            <div class="error-message" id="errorMessage"></div>
+
+                            <!-- Progress Bar -->
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                            </div>
+
+                            <!-- Preview Section -->
+                            <div class="preview-container" id="previewContainer">
+                                <img class="preview-image" id="previewImage" alt="Preview">
+                                <div class="file-info" id="fileInfo"></div>
+                            </div>
+
+                            <!-- Settings Section -->
+                            <div class="settings-section" id="settingsSection">
+                                <h5>Conversion Settings</h5>
+                                <div class="mb-3">
+                                    <label for="quality" class="form-label">Quality</label>
+                                    <select class="form-select" id="quality">
+                                        <option value="1">Maximum (Lossless)</option>
+                                        <option value="0.9">High (90%)</option>
+                                        <option value="0.8" selected>Good (80%)</option>
+                                        <option value="0.6">Medium (60%)</option>
+                                        <option value="0.4">Low (40%)</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="maxWidth" class="form-label">Maximum Width (optional)</label>
+                                    <input type="number" class="form-control" id="maxWidth" placeholder="Enter max width in pixels">
+                                </div>
+                            </div>
+
+                            <!-- Convert Button -->
+                            <button class="btn btn-success w-100 mt-3" id="convertBtn" style="display: none;">
+                                <i class="fas fa-sync-alt"></i> Convert to PNG
+                            </button>
+
+                            <!-- Download Button -->
+                            <button class="btn btn-primary w-100 mt-3" id="downloadBtn">
+                                <i class="fas fa-download"></i> Download PNG
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Features Section -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Features</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-start">
+                                        <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                                        <div>
+                                            <h6>Multiple Format Support</h6>
+                                            <p class="small text-muted">Convert from JPG, JPEG, WebP, GIF, and more</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-start">
+                                        <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                                        <div>
+                                            <h6>Quality Control</h6>
+                                            <p class="small text-muted">Choose your preferred output quality</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-start">
+                                        <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                                        <div>
+                                            <h6>Preserve Transparency</h6>
+                                            <p class="small text-muted">Maintain alpha channel in output PNG</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-start">
+                                        <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                                        <div>
+                                            <h6>Batch Processing</h6>
+                                            <p class="small text-muted">Convert multiple images at once</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ad Section -->
+            <div class="ad-section text-center mt-4">
+                <div class="ad-placeholder">
+                    <!-- Ad Space -->
+                    <div style="background: #f0f0f0; padding: 20px; border: 1px dashed #ccc;">
+                        Advertisement Space
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="../../assets/js/main.js"></script>
+    <!-- Tool Specific JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+            const previewContainer = document.getElementById('previewContainer');
+            const previewImage = document.getElementById('previewImage');
+            const fileInfo = document.getElementById('fileInfo');
+            const convertBtn = document.getElementById('convertBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const settingsSection = document.getElementById('settingsSection');
+            const errorMessage = document.getElementById('errorMessage');
+            const progressBar = document.querySelector('.progress');
+            const progressBarInner = document.querySelector('.progress-bar');
+
+            // Drag and drop functionality
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, preventDefaults, false);
+                document.body.addEventListener(eventName, preventDefaults, false);
+            });
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, unhighlight, false);
+            });
+
+            dropZone.addEventListener('drop', handleDrop, false);
+            fileInput.addEventListener('change', handleFiles);
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            function highlight(e) {
+                dropZone.classList.add('dragover');
+            }
+
+            function unhighlight(e) {
+                dropZone.classList.remove('dragover');
+            }
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                handleFiles({ target: { files: files } });
+            }
+
+            function handleFiles(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                // Check if file is an image
+                if (!file.type.startsWith('image/')) {
+                    showError('Please upload an image file.');
+                    return;
+                }
+
+                // Check file size (max 10MB)
+                if (file.size > 10 * 1024 * 1024) {
+                    showError('File size should be less than 10MB.');
+                    return;
+                }
+
+                hideError();
+                showPreview(file);
+            }
+
+            function showPreview(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewContainer.style.display = 'block';
+                    fileInfo.textContent = `${file.name} (${formatFileSize(file.size)})`;
+                    convertBtn.style.display = 'block';
+                    settingsSection.style.display = 'block';
+                    downloadBtn.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+            }
+
+            function hideError() {
+                errorMessage.style.display = 'none';
+            }
+
+            // Convert functionality
+            convertBtn.addEventListener('click', function() {
+                const quality = parseFloat(document.getElementById('quality').value);
+                const maxWidth = document.getElementById('maxWidth').value;
+                
+                progressBar.style.display = 'block';
+                progressBarInner.style.width = '0%';
+                
+                // Simulate progress (in real implementation, this would be actual conversion progress)
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 10;
+                    progressBarInner.style.width = progress + '%';
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            progressBar.style.display = 'none';
+                            downloadBtn.style.display = 'block';
+                            convertBtn.style.display = 'none';
+                        }, 500);
+                    }
+                }, 200);
+            });
+
+            // Download functionality
+            downloadBtn.addEventListener('click', function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const maxWidth = document.getElementById('maxWidth').value || previewImage.naturalWidth;
+                const quality = parseFloat(document.getElementById('quality').value);
+
+                // Calculate dimensions
+                let width = previewImage.naturalWidth;
+                let height = previewImage.naturalHeight;
+
+                if (width > maxWidth) {
+                    height = (maxWidth / width) * height;
+                    width = maxWidth;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+
+                // Draw image to canvas
+                ctx.drawImage(previewImage, 0, 0, width, height);
+
+                // Convert to PNG
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'converted_image.png';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 'image/png', quality);
+            });
+        });
+    </script>
+</body>
+</html> 

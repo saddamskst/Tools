@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meta Tag Generator - Free Online SEO Tool</title>
+    <meta name="description" content="Generate optimized meta tags for your website. Create title, description, keywords, and other essential meta tags for better SEO.">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../../assets/css/style.css" rel="stylesheet">
+    <style>
+        .meta-preview {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .google-preview {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        .google-preview .title {
+            color: #1a0dab;
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+        .google-preview .url {
+            color: #006621;
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+        .google-preview .description {
+            color: #545454;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        .code-output {
+            background: #2d2d2d;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .character-count {
+            color: #6c757d;
+            font-size: 0.875rem;
+            margin-top: 5px;
+        }
+        .warning {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="container py-4">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Meta Tag Generator</h1>
+                <p class="tool-description">
+                    Create optimized meta tags for your website. This tool helps you generate all essential meta tags 
+                    including title, description, keywords, and social media tags for better SEO performance.
+                </p>
+            </div>
+
+            <!-- Tool Content -->
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <form id="metaForm" class="needs-validation" novalidate>
+                        <!-- Basic Meta Tags -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Basic Meta Tags</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="pageTitle" class="form-label">Page Title</label>
+                                    <input type="text" class="form-control" id="pageTitle" maxlength="60" required>
+                                    <div class="character-count">
+                                        <span id="titleCount">0</span>/60 characters
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="metaDescription" class="form-label">Meta Description</label>
+                                    <textarea class="form-control" id="metaDescription" rows="3" maxlength="160" required></textarea>
+                                    <div class="character-count">
+                                        <span id="descriptionCount">0</span>/160 characters
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="metaKeywords" class="form-label">Meta Keywords (comma-separated)</label>
+                                    <input type="text" class="form-control" id="metaKeywords">
+                                    <small class="text-muted">Example: seo, meta tags, web development</small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="canonicalUrl" class="form-label">Canonical URL</label>
+                                    <input type="url" class="form-control" id="canonicalUrl" placeholder="https://example.com/page">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Social Media Meta Tags -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Social Media Meta Tags</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="ogTitle" class="form-label">Open Graph Title</label>
+                                    <input type="text" class="form-control" id="ogTitle">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="ogDescription" class="form-label">Open Graph Description</label>
+                                    <textarea class="form-control" id="ogDescription" rows="2"></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="ogImage" class="form-label">Open Graph Image URL</label>
+                                    <input type="url" class="form-control" id="ogImage" placeholder="https://example.com/image.jpg">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="twitterCard" class="form-label">Twitter Card Type</label>
+                                    <select class="form-select" id="twitterCard">
+                                        <option value="summary">Summary</option>
+                                        <option value="summary_large_image">Summary with Large Image</option>
+                                        <option value="app">App</option>
+                                        <option value="player">Player</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Meta Tags -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Additional Meta Tags</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="robots" class="form-label">Robots</label>
+                                    <select class="form-select" id="robots">
+                                        <option value="index, follow">Index, Follow</option>
+                                        <option value="noindex, follow">No Index, Follow</option>
+                                        <option value="index, nofollow">Index, No Follow</option>
+                                        <option value="noindex, nofollow">No Index, No Follow</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="viewport" class="form-label">Viewport</label>
+                                    <input type="text" class="form-control" id="viewport" value="width=device-width, initial-scale=1">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="author" class="form-label">Author</label>
+                                    <input type="text" class="form-control" id="author">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mb-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-code"></i> Generate Meta Tags
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Preview Section -->
+                    <div id="previewSection" style="display: none;">
+                        <h3>Google Search Preview</h3>
+                        <div class="google-preview">
+                            <div class="title" id="previewTitle"></div>
+                            <div class="url" id="previewUrl"></div>
+                            <div class="description" id="previewDescription"></div>
+                        </div>
+
+                        <h3>Generated Meta Tags</h3>
+                        <div class="code-output" id="metaTagOutput"></div>
+
+                        <div class="text-center mt-4">
+                            <button class="btn btn-success" id="copyButton">
+                                <i class="fas fa-copy"></i> Copy to Clipboard
+                            </button>
+                            <button class="btn btn-secondary" id="resetButton">
+                                <i class="fas fa-undo"></i> Reset Form
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ad Section -->
+            <div class="ad-section text-center mt-4">
+                <div class="ad-placeholder">
+                    <!-- Ad Space -->
+                    <div style="background: #f0f0f0; padding: 20px; border: 1px dashed #ccc;">
+                        Advertisement Space
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="../../assets/js/main.js"></script>
+    <!-- Tool Specific JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('metaForm');
+            const previewSection = document.getElementById('previewSection');
+            const copyButton = document.getElementById('copyButton');
+            const resetButton = document.getElementById('resetButton');
+            
+            // Character count updates
+            document.getElementById('pageTitle').addEventListener('input', function() {
+                document.getElementById('titleCount').textContent = this.value.length;
+                if (this.value.length > 60) {
+                    document.getElementById('titleCount').classList.add('warning');
+                } else {
+                    document.getElementById('titleCount').classList.remove('warning');
+                }
+            });
+
+            document.getElementById('metaDescription').addEventListener('input', function() {
+                document.getElementById('descriptionCount').textContent = this.value.length;
+                if (this.value.length > 160) {
+                    document.getElementById('descriptionCount').classList.add('warning');
+                } else {
+                    document.getElementById('descriptionCount').classList.remove('warning');
+                }
+            });
+
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const title = document.getElementById('pageTitle').value;
+                const description = document.getElementById('metaDescription').value;
+                const keywords = document.getElementById('metaKeywords').value;
+                const canonical = document.getElementById('canonicalUrl').value;
+                const ogTitle = document.getElementById('ogTitle').value || title;
+                const ogDescription = document.getElementById('ogDescription').value || description;
+                const ogImage = document.getElementById('ogImage').value;
+                const twitterCard = document.getElementById('twitterCard').value;
+                const robots = document.getElementById('robots').value;
+                const viewport = document.getElementById('viewport').value;
+                const author = document.getElementById('author').value;
+
+                // Generate meta tags
+                let metaTags = `<title>${title}</title>
+<meta name="description" content="${description}">
+<meta name="keywords" content="${keywords}">
+<meta name="robots" content="${robots}">
+<meta name="viewport" content="${viewport}">`;
+
+                if (author) {
+                    metaTags += `\n<meta name="author" content="${author}">`;
+                }
+
+                if (canonical) {
+                    metaTags += `\n<link rel="canonical" href="${canonical}">`;
+                }
+
+                // Open Graph tags
+                metaTags += `\n\n<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="${ogTitle}">
+<meta property="og:description" content="${ogDescription}">`;
+
+                if (canonical) {
+                    metaTags += `\n<meta property="og:url" content="${canonical}">`;
+                }
+
+                if (ogImage) {
+                    metaTags += `\n<meta property="og:image" content="${ogImage}">`;
+                }
+
+                // Twitter Card tags
+                metaTags += `\n\n<!-- Twitter -->
+<meta name="twitter:card" content="${twitterCard}">
+<meta name="twitter:title" content="${ogTitle}">
+<meta name="twitter:description" content="${ogDescription}">`;
+
+                if (ogImage) {
+                    metaTags += `\n<meta name="twitter:image" content="${ogImage}">`;
+                }
+
+                // Update preview
+                document.getElementById('previewTitle').textContent = title;
+                document.getElementById('previewUrl').textContent = canonical || 'https://example.com/page';
+                document.getElementById('previewDescription').textContent = description;
+                document.getElementById('metaTagOutput').textContent = metaTags;
+
+                previewSection.style.display = 'block';
+            });
+
+            // Copy to clipboard functionality
+            copyButton.addEventListener('click', function() {
+                const metaTags = document.getElementById('metaTagOutput').textContent;
+                navigator.clipboard.writeText(metaTags).then(function() {
+                    copyButton.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        copyButton.innerHTML = '<i class="fas fa-copy"></i> Copy to Clipboard';
+                    }, 2000);
+                });
+            });
+
+            // Reset form
+            resetButton.addEventListener('click', function() {
+                form.reset();
+                previewSection.style.display = 'none';
+                document.getElementById('titleCount').textContent = '0';
+                document.getElementById('descriptionCount').textContent = '0';
+            });
+        });
+    </script>
+</body>
+</html> 
